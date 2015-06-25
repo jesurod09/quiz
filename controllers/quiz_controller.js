@@ -51,5 +51,22 @@ exports.answer = function(req, res){
 		res.render('quizes/answer', {quiz: req.quiz, respuesta: resultado});	
 };
 
-//Mirar https://www.miriadax.net/web/javascript-node-js/foro/-/message_boards/view_message/34693751
-//Y esto para ordenar https://www.miriadax.net/web/javascript-node-js/foro/-/message_boards/view_message/34458509
+// GET /quizes/new
+exports.new = function(req, res) {
+  var quiz = models.Quiz.build( // crea objeto quiz 
+    {pregunta: "Pregunta", respuesta: "Respuesta"}
+  );
+
+  res.render('quizes/new', {quiz: quiz});
+};
+
+// POST /quizes/create
+exports.create = function(req, res) {
+	var quiz = models.Quiz.build(req.body.quiz );
+
+	//guarda en DB los campos pregunta y respuesta de quiz
+	quiz.save({fields: ["pregunta", "respuesta"]}).then(function(){
+		res.redirect('/quizes');
+		console.log("GUARDADO");
+	})	// Redireccion HTTP (URL relativo) lista de preguntas
+};
